@@ -1,0 +1,15 @@
+
+body{
+    display:flex;
+    align-items: center;
+    background-color: black;
+}
+div{
+    padding: 5em;
+}
+.carte{
+    width: 400px;
+    height: 400px;
+    background: blue;
+    margin-left: 37%;
+}
