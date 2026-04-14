@@ -1,15 +1,12 @@
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: rgb(1, 0, 20);
+}
 
-body{
-    display:flex;
-    align-items: center;
-    background-color: black;
-}
-div{
-    padding: 5em;
-}
-.carte{
-    width: 400px;
-    height: 400px;
-    background: blue;
-    margin-left: 37%;
+canvas {
+  border: 2px solid blue;
+  background-color: black;
 }
