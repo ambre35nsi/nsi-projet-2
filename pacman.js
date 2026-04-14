@@ -1,5 +1,13 @@
 let carte;
-let pacman;
+
+let pacman = new Image();
+pacman.src = "pacmanRight.png";
+const canvas = document.getElementById("game");
+const ctx = canvas.getContext("2d");
+pacman.onload = function() {
+    ctx.drawImage(pacman, 100, 100);
+};
+
 let fantome;
 
 carte = [
@@ -21,8 +29,6 @@ carte = [
   "XFOOOOXOOOXOOOOOX",
   "XXXXXXXXXXXXXXXXX",
 ];
-
-
 
 pacman={
     direction:null,
