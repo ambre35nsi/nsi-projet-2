@@ -1,12 +1,32 @@
 let carte;
+let pacmanX = 0;
+let pacmanY = 0;
+
+let fantomeX = 8;
+let fantomeY = 8;
+
+let pacmanRight = new Image();
+pacmanRight.src = "pacmanRight.png";
+let pacmanLeft = new Image();
+pacmanLeft.src = "pacmanLeft.png";
+let pacmanUp = new Image();
+pacmanUp.src = "pacmanUp.png";
+let pacmanDown = new Image();
+pacmanDown.src = "pacmanDown.png";
+
+let redGhost = new Image();
+redGhost.src = "redGhost.png";
+
+function start() {
+    alert("")
+  setInterval(refresh, 1000);
+}
+
+//fon,ction de rafraivhissement ou on appelle les fct necessaires
+function refresh() {}
 
 let pacman = new Image();
 pacman.src = "pacmanRight.png";
-const canvas = document.getElementById("game");
-const ctx = canvas.getContext("2d");
-pacman.onload = function() {
-    ctx.drawImage(pacman, 100, 100);
-};
 
 let fantome;
 
@@ -30,15 +50,9 @@ carte = [
   "XXXXXXXXXXXXXXXXX",
 ];
 
-pacman={
-    direction:null,
+pacman = {
+  direction: null,
 };
 
-fantome={
-    direction:null,
-};
-
-//fonction algo BFS a appeler dans la fonction de rafraichissement//
-function DirectionFantome(){
-
-}
+//fonction algo BFS a appeler dans la fonction de rafraichissement
+function DirectionFantome() {}
