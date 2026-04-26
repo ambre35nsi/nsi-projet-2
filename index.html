@@ -8,8 +8,12 @@
     <title>Pac-Man NSI</title>
 </head>
 <body style="min-width: 700px">
-    <!---1 case de la carte=35/35px-->
-    <canvas id="game" width="595" height="595"></canvas>
+        <!-- zone de jeu : canvas + message overlay -->
+        <div id="gameContainer" style="position:relative; width:595px; margin:0 auto 10px;">
+            <canvas id="game" width="595" height="595"></canvas>
+            <div id="gameMessage" style="display:none; position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); width:85%; text-align:center; font-size:22px; color:#fff; background:rgba(0,0,0,0.7); padding:8px; border-radius:6px; box-sizing:border-box; z-index:10;">
+            </div>
+        </div>
         <table>
             <tr>
                 <td style="padding-right: 30px;">

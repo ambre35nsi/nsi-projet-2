@@ -18,7 +18,9 @@ let redGhost = new Image();
 redGhost.src = "redGhost.png";
 
 function start() {
-  setInterval(refresh, 180);
+  // stocke l'ID de l'intervalle pour pouvoir l'arrêter plus tard
+  if (window.gameInterval) clearInterval(window.gameInterval);
+  window.gameInterval = setInterval(refresh, 180);
 }
 
 let pacman = new Image();

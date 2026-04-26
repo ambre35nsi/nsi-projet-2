@@ -58,6 +58,23 @@ function start2() {
 	if (boutonRestart) {
 		boutonRestart.style.display = "inline-block";
 	}
+	hideMessage();
+}
+
+function showMessage(msg) {
+	const el = document.getElementById('gameMessage');
+	if (el) {
+		el.textContent = msg;
+		el.style.display = 'block';
+	}
+}
+
+function hideMessage() {
+	const el = document.getElementById('gameMessage');
+	if (el) {
+		el.style.display = 'none';
+		el.textContent = '';
+	}
 }
 
 function recommencer() {
@@ -144,6 +161,11 @@ function refresh() {
 			pastilleMangee++;
 			changerCaseCarte(pacmanX, pacmanY, " ");
 			updateCountersDisplay();
+
+			// si toutes les pastilles sont mangées, terminer le jeu
+			if (pastilleTotal > 0 && pastilleMangee >= pastilleTotal) {
+				endGame(true);
+			}
 		}
 	}
 
@@ -176,3 +198,19 @@ document.addEventListener("keydown", function(e) {
 window.onload = function() {
 	chargerCarte();
 };
+
+function endGame(win) {
+	if (window.gameInterval) {
+		clearInterval(window.gameInterval);
+		window.gameInterval = null;
+	}
+	const bs = document.getElementById('btnStart');
+	const br = document.getElementById('btnRestart');
+	if (bs) bs.style.display = 'none';
+	if (br) br.style.display = 'inline-block';
+	if (win) {
+		setTimeout(function() { showMessage('Bravo — tu as mangé toutes les pastilles !'); }, 50);
+	} else {
+		setTimeout(function() { showMessage('Game over'); }, 50);
+	}
+}
