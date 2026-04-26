@@ -12,7 +12,7 @@ canvas {
   background-color: black;
 }
 
-button{
+button {
   font-size: 30px;
   cursor: pointer;
   background-color: #0026a3;
@@ -24,6 +24,6 @@ button{
   margin-top: 40px;
 }
 
-button:hover{
+button:hover {
   background-color: #0e3bcf;
 }

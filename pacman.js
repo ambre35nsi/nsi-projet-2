@@ -92,6 +92,7 @@ pacman = {
     //             parent[(nx, ny)] = (x, y)
     
     // return None  # pas de chemin
+
 function DirectionFantome(carte, fantomeX, fantomeY, pacmanX, pacmanY) {
   let start = [fantomeX, fantomeY] ;
   let end = [pacmanX, pacmanY] ;
