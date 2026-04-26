@@ -246,6 +246,7 @@ _pkginfo.txt
 !?*.[Cc]ache/
 
 # Others
+.github/copilot-instructions.md
 ClientBin/
 ~$*
 *~
