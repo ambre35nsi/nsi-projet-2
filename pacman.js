@@ -18,7 +18,7 @@ let redGhost = new Image();
 redGhost.src = "redGhost.png";
 
 function start() {
-  setInterval(refresh, 1000);
+  setInterval(refresh, 180);
 }
 
 //fon,ction de rafraivhissement ou on appelle les fct necessaires
