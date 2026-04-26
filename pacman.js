@@ -94,38 +94,60 @@ pacman = {
     // return None  # pas de chemin
 
 function DirectionFantome(carte, fantomeX, fantomeY, pacmanX, pacmanY) {
-  let start = [fantomeX, fantomeY] ;
-  let end = [pacmanX, pacmanY] ;
-  let file = [] ;
-  file.push(start) ;
+  let start = [fantomeX, fantomeY];
+  let end = [pacmanX, pacmanY];
+  let file = [start];
 
-  let visited = newSet() ;
-  visited.add(start) ;
+  let visited = new Set();
+  visited.add(start.toString());
 
-  let parent = {} ;
+  let parent = {};
+  const directions = [
+    [1, 0],
+    [-1, 0],
+    [0, 1],
+    [0, -1],
+  ];
 
   while (file.length > 0) {
-    let [x, y] = file.shift() ;
+    let [x, y] = file.shift();
 
-    if ([x, y] == end) {
-      let chemin = [] ;
-      while ([x, y] != start) {
-        chemin.push([x, y]) ;
-        let x, y = parent[[x, y]] ;
+    if (x === end[0] && y === end[1]) {
+      let chemin = [];
+      let cle = [x, y].toString();
+
+      while (cle !== start.toString()) {
+        let [cx, cy] = cle.split(",").map(Number);
+        chemin.push([cx, cy]);
+        cle = parent[cle];
       }
-      chemin.reverse() ;
-      return chemin ;
-    }
-    for (dx, dy in [(1,0),(-1,0),(0,1),(0,-1)]) {
-      let nx, ny = x+dx, y+dy ;
 
-      //on verifie les murs et les visités
-      if (nx >= 0 && nx < carte.length && ny >= 0 && ny < carte.length && carte[nx][ny] === 0 && !visited.has([nx, ny].toString())) {
-        file.push([nx, ny]) ;
-        visited.add([nx, ny]) ;
-        parennt[[nx, ny]] = [x, y] ;
+      chemin.reverse();
+      return chemin;
+    }
+
+    for (let i = 0; i < directions.length; i++) {
+      let dx = directions[i][0];
+      let dy = directions[i][1];
+      let nx = x + dx;
+      let ny = y + dy;
+      let cleVoisin = [nx, ny].toString();
+
+      //on verifie les limites, les murs et les cases deja visitees
+      if (
+        nx >= 0 &&
+        nx < carte.length &&
+        ny >= 0 &&
+        ny < carte[nx].length &&
+        carte[nx][ny] !== "X" &&
+        !visited.has(cleVoisin)
+      ) {
+        file.push([nx, ny]);
+        visited.add(cleVoisin);
+        parent[cleVoisin] = [x, y].toString();
       }
     }
   }
-  return null ;
+
+  return null;
 }
