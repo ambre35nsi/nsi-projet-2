@@ -11,7 +11,8 @@
     <!---1 case de la carte=35/35px-->
     <canvas id="game" width="595" height="595"></canvas>
     <form action="start">
-        <button type="button" onclick="start()">Start</button>
+        <button id="btnStart" type="button" onclick="start();start2();">Start</button>
+        <button id="btnRestart" type="button" onclick="recommencer();" style="display:none;">Recommencer</button>
     </form>
     <!---lu en dernier-->
     <script src="pacman.js"></script>

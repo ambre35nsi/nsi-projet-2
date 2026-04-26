@@ -1,5 +1,22 @@
 const tailleCase = 35;
 
+function start2() {
+
+	let boutonStart = document.getElementById("btnStart");
+	let boutonRestart = document.getElementById("btnRestart");
+
+	if (boutonStart) {
+		boutonStart.style.display = "none";
+	}
+	if (boutonRestart) {
+		boutonRestart.style.display = "inline-block";
+	}
+}
+
+function recommencer() {
+	location.reload();
+}
+
 function dessiner() {
 	const canvas = document.getElementById("game");
 	const ctx = canvas.getContext("2d");

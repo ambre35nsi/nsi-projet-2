@@ -21,9 +21,6 @@ function start() {
   setInterval(refresh, 180);
 }
 
-//fon,ction de rafraivhissement ou on appelle les fct necessaires
-function refresh() {}
-
 let pacman = new Image();
 pacman.src = "pacmanRight.png";
 
