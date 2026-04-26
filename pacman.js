@@ -18,7 +18,6 @@ let redGhost = new Image();
 redGhost.src = "redGhost.png";
 
 function start() {
-    alert("")
   setInterval(refresh, 1000);
 }
 

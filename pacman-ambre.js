@@ -28,7 +28,12 @@ function dessiner() {
 	}
 
 	// on place pacman et le fantome
-	ctx.drawImage(pacmanRight, pacmanX * tailleCase, pacmanY * tailleCase, tailleCase, tailleCase);
+	let imagePacman = pacmanRight;
+	if (pacman.direction === "gauche") imagePacman = pacmanLeft;
+	if (pacman.direction === "haut") imagePacman = pacmanUp;
+	if (pacman.direction === "bas") imagePacman = pacmanDown;
+
+	ctx.drawImage(imagePacman, pacmanX * tailleCase, pacmanY * tailleCase, tailleCase, tailleCase);
 	ctx.drawImage(redGhost, fantomeX * tailleCase, fantomeY * tailleCase, tailleCase, tailleCase);
 }
 
