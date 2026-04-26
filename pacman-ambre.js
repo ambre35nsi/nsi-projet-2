@@ -1,8 +1,50 @@
 const tailleCase = 35;
 
+// carte codée en dur 17x17
+carte2 = [
+  "XXXXXXXXXXXXXXXXX",
+  "XOOOOOXOOOXOOOOOX",
+  "XOXXXOXOXOXOXXXOX",
+  "XOXOOOXOXOXOOOXOX",
+  "XOXOXOXOXOXOXOXOX",
+  "XOXOXOXOXOXOXOXOX",
+  "XOXOXOOOOOOOXOXOX",
+  "XOOOOOXXXXXOOOOOX",
+  "XXXXXOOOPOOOXXXXX",
+  "XOOOOOXXXXXOOOOOX",
+  "XOXOXOOOOOOOXOXOX",
+  "XOXOXOXOXOXOXOXOX",
+  "XOXOXOXOXOXOXOXOX",
+  "XOXOOOXOXOXOOOXOX",
+  "XOXXXOXOXOXOXXXOX",
+  "XFOOOOXOOOXOOOOOX",
+  "XXXXXXXXXXXXXXXXX",
+];
+
 function changerCaseCarte(x, y, valeur) {
 	let ligne = carte[y];
 	carte[y] = ligne.substring(0, x) + valeur + ligne.substring(x + 1);
+}
+
+// compteurs de pastilles
+let pastilleMangee = 0;
+let pastilleTotal = 0;
+
+function updateCountersDisplay() {
+	const textPastilleMangee = document.getElementById('spanPastilleMangee');
+	const textPastilleMangeeTotal = document.getElementById('spanPastilleTotal');
+	if (textPastilleMangee) textPastilleMangee.textContent = pastilleMangee;
+	if (textPastilleMangeeTotal) textPastilleMangeeTotal.textContent = pastilleTotal;
+}
+
+function countTotalPastilles() {
+	let c = 0;
+	for (let y = 0; y < carte.length; y++) {
+		for (let x = 0; x < carte[y].length; x++) {
+			if (carte[y][x] === 'O') c++;
+		}
+	}
+	return c;
 }
 
 function start2() {
@@ -74,6 +116,11 @@ function chargerCarte() {
 		}
 	}
 
+	// compter le nombre total de pastilles et initialiser le compteur mangé
+	pastilleTotal = countTotalPastilles();
+	pastilleMangee = 0;
+	updateCountersDisplay();
+
 	dessiner();
 }
 
@@ -94,7 +141,9 @@ function refresh() {
 
 		// si pacman passe sur une pastille, on la mange
 		if (carte[pacmanY][pacmanX] === "O") {
+			pastilleMangee++;
 			changerCaseCarte(pacmanX, pacmanY, " ");
+			updateCountersDisplay();
 		}
 	}
 

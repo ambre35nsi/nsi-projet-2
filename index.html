@@ -7,13 +7,27 @@
     <link href="style-ambre.css" rel="stylesheet">
     <title>Pac-Man NSI</title>
 </head>
-<body>
+<body style="min-width: 700px">
     <!---1 case de la carte=35/35px-->
     <canvas id="game" width="595" height="595"></canvas>
-    <form action="start">
-        <button id="btnStart" type="button" onclick="start();start2();">Start</button>
-        <button id="btnRestart" type="button" onclick="recommencer();" style="display:none;">Recommencer</button>
-    </form>
+        <table>
+            <tr>
+                <td style="padding-right: 30px;">
+                    <span>Carte</span>
+                    <button id="btnCarte1" type="button" onclick="" style="width:40px">1</button>
+                    <button id="btnCarte2" type="button" onclick="" style="width:40px">2</button>
+                </td>
+                <td>
+                    <button id="btnStart" type="button" onclick="start();start2();">Start</button>
+                    <button id="btnRestart" type="button" onclick="recommencer();" style="display:none;">Recommencer</button>
+                </td>
+                <td style="padding-left: 30px;">
+                    <span id="spanPastilleMangee">0</span>
+                    <span id="spanPastilleSeparation">/</span>
+                    <span id="spanPastilleTotal">0</span>
+                </td>
+            </tr>
+        </table>
     <!---lu en dernier-->
     <script src="pacman.js"></script>
     <script src="pacman-ambre.js"></script>
