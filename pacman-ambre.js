@@ -1,5 +1,10 @@
 const tailleCase = 35;
 
+function changerCaseCarte(x, y, valeur) {
+	let ligne = carte[y];
+	carte[y] = ligne.substring(0, x) + valeur + ligne.substring(x + 1);
+}
+
 function start2() {
 
 	let boutonStart = document.getElementById("btnStart");
@@ -82,10 +87,15 @@ function refresh() {
 	if (pacman.direction === "haut")   ny = pacmanY - 1;
 	if (pacman.direction === "bas")    ny = pacmanY + 1;
 
-	// on bouge pacman seulement si c'est pas un mur
-	if (carte[ny][nx] !== "X") {
+	// on bouge pacman seulement si c'est dans la carte et pas un mur
+	if (ny >= 0 && ny < carte.length && nx >= 0 && nx < carte[ny].length && carte[ny][nx] !== "X") {
 		pacmanX = nx;
 		pacmanY = ny;
+
+		// si pacman passe sur une pastille, on la mange
+		if (carte[pacmanY][pacmanX] === "O") {
+			changerCaseCarte(pacmanX, pacmanY, " ");
+		}
 	}
 
 	// on bouge le fantome avec le BFS
