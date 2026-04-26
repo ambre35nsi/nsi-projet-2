@@ -1,2 +1,2 @@
 # nsi-projet-2
-Projet NSI 1ère Saint-Grégoire
+Projet NSI 1ère Saint-Grégoire : Pacman
