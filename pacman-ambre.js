@@ -10,6 +10,9 @@ pacmanDown.src = "pacmanDown.png";
 
 let redGhost = new Image();
 redGhost.src = "redGhost.png";
+let pacman = new Image();
+pacman.src = "pacmanRight.png";
+
 
 // carte codée en dur 17x17
 carte1 = [
