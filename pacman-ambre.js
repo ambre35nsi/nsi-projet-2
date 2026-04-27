@@ -49,7 +49,7 @@ function countTotalPastilles() {
 	return c;
 }
 
-function start2() {
+function start() {
 
 	let boutonStart = document.getElementById("btnStart");
 	let boutonRestart = document.getElementById("btnRestart");
