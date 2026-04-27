@@ -2,23 +2,23 @@ const tailleCase = 35;
 
 // carte codée en dur 17x17
 carte2 = [
-  "XXXXXXXXXXXXXXXXX",
-  "XOOOOOXOOOXOOOOOX",
-  "XOXXXOXOXOXOXXXOX",
-  "XOXOOOXOXOXOOOXOX",
-  "XOXOXOXOXOXOXOXOX",
-  "XOXOXOXOXOXOXOXOX",
-  "XOXOXOOOOOOOXOXOX",
-  "XOOOOOXXXXXOOOOOX",
-  "XXXXXOOOPOOOXXXXX",
-  "XOOOOOXXXXXOOOOOX",
-  "XOXOXOOOOOOOXOXOX",
-  "XOXOXOXOXOXOXOXOX",
-  "XOXOXOXOXOXOXOXOX",
-  "XOXOOOXOXOXOOOXOX",
-  "XOXXXOXOXOXOXXXOX",
-  "XFOOOOXOOOXOOOOOX",
-  "XXXXXXXXXXXXXXXXX",
+	"XXXXXXXXXXXXXXXXX",
+	"XPOOOOXOOOOOXXXOOX",
+	"XOXOXOXOXOXOXOXOX",
+	"XOXOOOXOXOXOOOXOX",
+	"XOXOXOXXXXXOXOXOX",
+	"XOXOXOXOOOOOXOXOX",
+	"XOXOXOOOOOOOXOXOX",
+	"XOOOOOXXXOOOOOOOX",
+	"XXXOOOPOOOOXXXFXX",
+	"XOOOOOXXXOOOOOOOX",
+	"XOXOXOOOOOOOXOXOX",
+	"XOXOXOXOXOXOXOXOX",
+	"XOXOXOXOXOXOXOXOX",
+	"XOXOOOXOXOXOOOXOX",
+	"XOXXXOXOXOXOXXXOX",
+	"XOOOOOXOOOXOOOOOX",
+	"XXXXXXXXXXXXXXXXX",
 ];
 
 function changerCaseCarte(x, y, valeur) {
@@ -59,6 +59,7 @@ function start2() {
 		boutonRestart.style.display = "inline-block";
 	}
 	hideMessage();
+	setMapButtonsDisabled(true);
 }
 
 function showMessage(msg) {
@@ -75,6 +76,13 @@ function hideMessage() {
 		el.style.display = 'none';
 		el.textContent = '';
 	}
+}
+
+function setMapButtonsDisabled(disabled) {
+	const b1 = document.getElementById('btnCarte1');
+	const b2 = document.getElementById('btnCarte2');
+	if (b1) b1.disabled = disabled;
+	if (b2) b2.disabled = disabled;
 }
 
 function recommencer() {
@@ -141,6 +149,20 @@ function chargerCarte() {
 	dessiner();
 }
 
+// charger la carte 1 (par défaut)
+function chargerCarte1() {
+	carte = [...carte1];
+	chargerCarte();
+	hideMessage();
+}
+
+// charger la carte 2 (ambree)
+function chargerCarte2() {
+	carte = [...carte2];
+	chargerCarte();
+	hideMessage();
+}
+
 function refresh() {
 	// on calcule la prochaine position de pacman
 	let nx = pacmanX;
@@ -196,7 +218,7 @@ document.addEventListener("keydown", function(e) {
 });
 
 window.onload = function() {
-	chargerCarte();
+	chargerCarte1();
 };
 
 function endGame(win) {
@@ -208,6 +230,7 @@ function endGame(win) {
 	const br = document.getElementById('btnRestart');
 	if (bs) bs.style.display = 'none';
 	if (br) br.style.display = 'inline-block';
+	setMapButtonsDisabled(false);
 	if (win) {
 		setTimeout(function() { showMessage('Bravo — tu as mangé toutes les pastilles !'); }, 50);
 	} else {

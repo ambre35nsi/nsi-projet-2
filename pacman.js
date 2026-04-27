@@ -28,7 +28,7 @@ pacman.src = "pacmanRight.png";
 
 let fantome;
 
-carte = [
+carte1 = [
   "XXXXXXXXXXXXXXXXX",
   "XOOOOOXOOOXOOOOOX",
   "XOXXXOXOXOXOXXXOX",
