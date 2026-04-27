@@ -1,4 +1,15 @@
 const tailleCase = 35;
+let pacmanRight = new Image();
+pacmanRight.src = "pacmanRight.png";
+let pacmanLeft = new Image();
+pacmanLeft.src = "pacmanLeft.png";
+let pacmanUp = new Image();
+pacmanUp.src = "pacmanUp.png";
+let pacmanDown = new Image();
+pacmanDown.src = "pacmanDown.png";
+
+let redGhost = new Image();
+redGhost.src = "redGhost.png";
 
 // carte codée en dur 17x17
 carte1 = [
@@ -23,7 +34,7 @@ carte1 = [
 
 carte2 = [
 	"XXXXXXXXXXXXXXXXX",
-	"XPOOOOXOOOOOXXXOOX",
+	"XOOOOXOOOOOXXXOOX",
 	"XOXOXOXOXOXOXOXOX",
 	"XOXOOOXOXOXOOOXOX",
 	"XOXOXOXXXXXOXOXOX",
