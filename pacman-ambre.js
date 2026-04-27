@@ -63,6 +63,8 @@ function start2() {
 	hideMessage();
 	setMapButtonsDisabled(true);
 	playMusic();
+	if (window.gameInterval) clearInterval(window.gameInterval);
+  	window.gameInterval = setInterval(refresh, 180);
 }
 
 function showMessage(msg) {
