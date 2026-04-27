@@ -110,14 +110,14 @@ function DirectionFantome(carte, fantomeX, fantomeY, pacmanX, pacmanY) {
   while (file.length > 0) {
     let [x, y] = file.shift();
 
-    if (x === end[0] && y === end[1]) {
+    let positionStr = [x, y].toString();
+    if (positionStr === end.toString())) {
       let chemin = [];
-      let cle = [x, y].toString();
 
-      while (cle !== start.toString()) {
-        let [cx, cy] = cle.split(",").map(Number);
+      while (positionStr !== start.toString()) {
+        let [cx, cy] = positionStr.split(",").map(Number);
         chemin.push([cx, cy]);
-        cle = parent[cle];
+        positionStr = parent[positionStr];
       }
 
       chemin.reverse();
