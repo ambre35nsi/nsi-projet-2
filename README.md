@@ -31,3 +31,8 @@ La répartition du travail entre les membres du groupe
 -	Eugenie : style de carte, direction_fantome, window onload, creer le tableau de carte
 -	Ambre : direction_joueur, rafraichir, charger_images
 -	Nouha : background color, afficher_elements, fonction score
+
+4) Musiques
+Libre de droits
+https://www.voicy.network/fr/search/pacman-sound-effects
+https://pixabay.com/fr/music/jeux-vid%c3%a9o-retro-short-4-397354/

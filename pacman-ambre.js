@@ -29,6 +29,8 @@ function changerCaseCarte(x, y, valeur) {
 // compteurs de pastilles
 let pastilleMangee = 0;
 let pastilleTotal = 0;
+// musique de fond
+let gameMusic = null;
 
 function updateCountersDisplay() {
 	const textPastilleMangee = document.getElementById('spanPastilleMangee');
@@ -60,6 +62,7 @@ function start2() {
 	}
 	hideMessage();
 	setMapButtonsDisabled(true);
+	playMusic();
 }
 
 function showMessage(msg) {
@@ -83,6 +86,31 @@ function setMapButtonsDisabled(disabled) {
 	const b2 = document.getElementById('btnCarte2');
 	if (b1) b1.disabled = disabled;
 	if (b2) b2.disabled = disabled;
+}
+
+function playMusic() {
+	try {
+		if (!gameMusic) {
+			gameMusic = new Audio('pacman.mp3');
+			gameMusic.loop = true;
+		}
+		gameMusic.currentTime = 0;
+		// play() returns a promise — ignore rejections caused by autoplay policies
+		gameMusic.play().catch(function() {});
+	} catch (e) {
+		console.log('Impossible de jouer la musique :', e);
+	}
+}
+
+function stopMusic() {
+	try {
+		if (gameMusic) {
+			gameMusic.pause();
+			gameMusic.currentTime = 0;
+		}
+	} catch (e) {
+		console.log('Impossible d arreter la musique :', e);
+	}
 }
 
 function recommencer() {
@@ -231,6 +259,7 @@ function endGame(win) {
 	if (bs) bs.style.display = 'none';
 	if (br) br.style.display = 'inline-block';
 	setMapButtonsDisabled(false);
+	stopMusic();
 	if (win) {
 		setTimeout(function() { showMessage('Bravo — tu as mangé toutes les pastilles !'); }, 50);
 	} else {
