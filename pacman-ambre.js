@@ -191,6 +191,65 @@ function chargerCarte2() {
 	hideMessage();
 }
 
+function DirectionFantome(carte, fantomeX, fantomeY, pacmanX, pacmanY) {
+  let start = [fantomeX, fantomeY];
+  let end = [pacmanX, pacmanY];
+  let file = [start];
+
+  let visited = new Set();
+  visited.add(start.toString());
+
+  let parent = {};
+  const directions = [
+    [1, 0],
+    [-1, 0],
+    [0, 1],
+    [0, -1],
+  ];
+
+  while (file.length > 0) {
+    let [x, y] = file.shift();
+
+    let positionStr = [x, y].toString();
+    if (positionStr === end.toString())) {
+      let chemin = [];
+
+      while (positionStr !== start.toString()) {
+        let [cx, cy] = positionStr.split(",").map(Number);
+        chemin.push([cx, cy]);
+        positionStr = parent[positionStr];
+      }
+
+      chemin.reverse();
+      return chemin;
+    }
+
+    for (let i = 0; i < directions.length; i++) {
+      let dx = directions[i][0];
+      let dy = directions[i][1];
+      let nx = x + dx;
+      let ny = y + dy;
+      let cleVoisin = [nx, ny].toString();
+
+      //on verifie les limites, les murs et les cases deja visitees
+      if (
+        nx >= 0 &&
+        nx < carte.length &&
+        ny >= 0 &&
+        ny < carte[nx].length &&
+        carte[nx][ny] !== "X" &&
+        !visited.has(cleVoisin)
+      ) {
+        file.push([nx, ny]);
+        visited.add(cleVoisin);
+        parent[cleVoisin] = [x, y].toString();
+      }
+    }
+  }
+
+  return null;
+}
+
 function refresh() {
 	// on calcule la prochaine position de pacman
 	let nx = pacmanX;
