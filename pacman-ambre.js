@@ -1,6 +1,26 @@
 const tailleCase = 35;
 
 // carte codée en dur 17x17
+carte1 = [
+  "XXXXXXXXXXXXXXXXX",
+  "XOOOOOXOOOXOOOOOX",
+  "XOXXXOXOXOXOXXXOX",
+  "XOXOOOXOXOXOOOXOX",
+  "XOXOXOXOXOXOXOXOX",
+  "XOXOXOXOXOXOXOXOX",
+  "XOXOXOOOOOOOXOXOX",
+  "XOOOOOXXXXXOOOOOX",
+  "XXXXXOOOPOOOXXXXX",
+  "XOOOOOXXXXXOOOOOX",
+  "XOXOXOOOOOOOXOXOX",
+  "XOXOXOXOXOXOXOXOX",
+  "XOXOXOXOXOXOXOXOX",
+  "XOXOOOXOXOXOOOXOX",
+  "XOXXXOXOXOXOXXXOX",
+  "XFOOOOXOOOXOOOOOX",
+  "XXXXXXXXXXXXXXXXX",
+];
+
 carte2 = [
 	"XXXXXXXXXXXXXXXXX",
 	"XPOOOOXOOOOOXXXOOX",
@@ -213,7 +233,7 @@ function DirectionFantome(carte, fantomeX, fantomeY, pacmanX, pacmanY) {
     let [x, y] = file.shift();
 
     let positionStr = [x, y].toString();
-    if (positionStr === end.toString())) {
+    if (positionStr === end.toString()) {
       let chemin = [];
 
       while (positionStr !== start.toString()) {
