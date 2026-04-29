@@ -8,7 +8,7 @@
 </head>
 <body style="min-width: 700px">
         <!-- zone de jeu : canvas + message overlay -->
-        <div id="gameContainer" style="position:relative; width:595px; margin:0 auto 10px;">
+        <div id="gameContainer" class="carte" style="position:relative; width:595px; margin:0 auto 10px;">
             <canvas id="game" width="595" height="595"></canvas>
             <div id="gameMessage" style="display:none; position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); width:85%; text-align:center; font-size:22px; color:#fff; background:rgba(0,0,0,0.7); padding:8px; border-radius:6px; box-sizing:border-box; z-index:10;">
             </div>
@@ -16,9 +16,14 @@
         <table>
             <tr>
                 <td style="padding-right: 30px;">
+                    <span>Niveau</span>
+                    <button id="btnNiveau1" type="button" onclick="changerNiveau(1);" style="width:40px">1</button>
+                    <button id="btnNiveau2" type="button" onclick="changerNiveau(2);" style="width:40px">2</button>
+                </td>                
+                <td style="padding-right: 30px;">
                     <span>Carte</span>
-                    <button id="btnCarte1" type="button" onclick="chargerCarte1();" style="width:40px">1</button>
-                    <button id="btnCarte2" type="button" onclick="chargerCarte2();" style="width:40px">2</button>
+                    <button id="btnCarte1" type="button" onclick="chargerCarte(1);" style="width:40px">1</button>
+                    <button id="btnCarte2" type="button" onclick="chargerCarte(2);" style="width:40px">2</button>
                 </td>
                 <td>
                     <button id="btnStart" type="button" onclick="start();">Start</button>

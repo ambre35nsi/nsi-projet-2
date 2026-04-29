@@ -47,7 +47,7 @@ button, span {
 
   /* message au dessus de la carte */
   /* container de la zone de jeu */
-  #gameContainer {
+  .carte {
     position: relative;
     width: 595px;
     margin: 0 auto 10px;
