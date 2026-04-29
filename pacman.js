@@ -1,10 +1,4 @@
-let carte;
-let pacmanX = 0;
-let pacmanY = 0;
-
-let fantomeX = 8;
-let fantomeY = 8;
-
+const tailleCase = 35;
 let pacmanRight = new Image();
 pacmanRight.src = "pacmanRight.png";
 let pacmanLeft = new Image();
@@ -16,18 +10,11 @@ pacmanDown.src = "pacmanDown.png";
 
 let redGhost = new Image();
 redGhost.src = "redGhost.png";
-
-function start() {
-  // stocke l'ID de l'intervalle pour pouvoir l'arrêter plus tard
-  if (window.gameInterval) clearInterval(window.gameInterval);
-  window.gameInterval = setInterval(refresh, 180);
-}
-
 let pacman = new Image();
 pacman.src = "pacmanRight.png";
 
-let fantome;
 
+// carte codée en dur 17x17
 carte1 = [
   "XXXXXXXXXXXXXXXXX",
   "XOOOOOXOOOXOOOOOX",
@@ -48,48 +35,219 @@ carte1 = [
   "XXXXXXXXXXXXXXXXX",
 ];
 
-pacman = {
-  direction: null,
-};
+carte2 = [
+	"XXXXXXXXXXXXXXXXX",
+	"XOOOOXXXXXXXXXOOX",
+	"XOXOXOXOXOXOXOXOX",
+	"XOXOOOXOXOXOOOXOX",
+	"XOXOXOOOOOOOXOXOX",
+	"XOXOXOXOOOOOXOXOX",
+	"XOXOXOOOOOOOXOXOX",
+	"XOOOOOXXXOOOOOOOX",
+	"XXXOOOPOOOOXXXFXX",
+	"XOOOOOXXXOOOOOOOX",
+	"XOXOXOOOOOOOXOXOX",
+	"XOXOXOXOXOXOXOXOX",
+	"XOXOXOXOXOXOXOXOX",
+	"XOXOOOXOXOXOOOXOX",
+	"XOXXXOXOXOXOXXXOX",
+	"XOOOOOXOOOXOOOOOX",
+	"XXXXXXXXXXXXXXXXX",
+];
 
-//fonction algo BFS a appeler dans la fonction de rafraichissement
+//X = wall, O =skip, P = pac man, '' = food
+//Ghosts: r = red 
+const carte3 = [
+    "XXXXXXXXXXXXXXXXX",
+    "XFOOOOXOOOXOOOOOX",
+    "XOXXXOXOXOXOXXXOX",
+    "XOXOOOXOXOXOOOXOX",
+    "XOXOXOXOXOXOXOXOX",
+    "XOXOXOXOXOXOXOXOX",
+    "XOXOXOOOOOOOXOXOX",
+    "XOOOOOXXXXXOOOOOX",
+    "XXXXXOOOPOOOXXXXX",
+    "XOOOOOXXXXXOOOOOX",
+    "XOXOXOOOOOOOXOXOX",
+    "XOXOXOXOXOXOXOXOX",
+    "XOXOXOXOXOXOXOXOX",
+    "XOXOOOXOXOXOOOXOX",
+    "XOXXXOXOXOXOXXXOX",
+    "XFOOOOXOOOXOOOOOX",
+    "XXXXXXXXXXXXXXXXX",
+]
 
+function changerCaseCarte(x, y, valeur) {
+	let ligne = carte[y];
+	carte[y] = ligne.substring(0, x) + valeur + ligne.substring(x + 1);
+}
 
-//def bfs(grille, start, end):
-    // queue = deque() #comme une liste mais optimisée 
-    // queue.append(start)
-    
-    // visited = set() #pratique pour verifier rapidement si un element y est
-    // visited.add(start)
-    
-    // parent = {}  # pour reconstruire le chemin
-    
-    // while queue: #tant que la file n est pas vide
-    //     x, y = queue.popleft() #donc si queue=deque([(2,3),(4,5)]) ba x=2 et y=3
-        
-    //     if (x, y) == end: # c est le chemin qui arrive en premier a la fin donc le plus rapide
-    //         # reconstruire le chemin
-    //         path = []
-    //         while (x, y) != start:
-    //             path.append((x, y))
-    //             x, y = parent[(x, y)]
-    //         path.reverse()
-    //         return path
-        
-    //     for dx, dy in [(1,0), (-1,0), (0,1), (0,-1)]:
-    //         nx, ny = x + dx, y + dy
-            
-    //         # vérifier limites + mur + visite
-    //         if (0 <= nx < len(grille) and
-    //             0 <= ny < len(grille[0]) and
-    //             grille[nx][ny] == 0 and
-    //             (nx, ny) not in visited):
-                
-    //             queue.append((nx, ny))
-    //             visited.add((nx, ny))
-    //             parent[(nx, ny)] = (x, y)
-    
-    // return None  # pas de chemin
+// compteurs de pastilles
+let pastilleMangee = 0;
+let pastilleTotal = 0;
+// musique de fond
+let gameMusic = null;
+
+function updateCountersDisplay() {
+	const textPastilleMangee = document.getElementById('spanPastilleMangee');
+	const textPastilleMangeeTotal = document.getElementById('spanPastilleTotal');
+	if (textPastilleMangee) textPastilleMangee.textContent = pastilleMangee;
+	if (textPastilleMangeeTotal) textPastilleMangeeTotal.textContent = pastilleTotal;
+}
+
+function countTotalPastilles() {
+	let c = 0;
+	for (let y = 0; y < carte.length; y++) {
+		for (let x = 0; x < carte[y].length; x++) {
+			if (carte[y][x] === 'O') c++;
+		}
+	}
+	return c;
+}
+
+function start() {
+
+	let boutonStart = document.getElementById("btnStart");
+	let boutonRestart = document.getElementById("btnRestart");
+
+	if (boutonStart) {
+		boutonStart.style.display = "none";
+	}
+	if (boutonRestart) {
+		boutonRestart.style.display = "inline-block";
+	}
+	hideMessage();
+	setMapButtonsDisabled(true);
+	playMusic();
+	if (window.gameInterval) clearInterval(window.gameInterval);
+  	window.gameInterval = setInterval(refresh, 180);
+}
+
+function showMessage(msg) {
+	const el = document.getElementById('gameMessage');
+	if (el) {
+		el.textContent = msg;
+		el.style.display = 'block';
+	}
+}
+
+function hideMessage() {
+	const el = document.getElementById('gameMessage');
+	if (el) {
+		el.style.display = 'none';
+		el.textContent = '';
+	}
+}
+
+function setMapButtonsDisabled(disabled) {
+	const b1 = document.getElementById('btnCarte1');
+	const b2 = document.getElementById('btnCarte2');
+	if (b1) b1.disabled = disabled;
+	if (b2) b2.disabled = disabled;
+}
+
+function playMusic() {
+	try {
+		if (!gameMusic) {
+			gameMusic = new Audio('pacman.mp3');
+			gameMusic.loop = true;
+		}
+		gameMusic.currentTime = 0;
+		// play() returns a promise — ignore rejections caused by autoplay policies
+		gameMusic.play().catch(function() {});
+	} catch (e) {
+		console.log('Impossible de jouer la musique :', e);
+	}
+}
+
+function stopMusic() {
+	try {
+		if (gameMusic) {
+			gameMusic.pause();
+			gameMusic.currentTime = 0;
+		}
+	} catch (e) {
+		console.log('Impossible d arreter la musique :', e);
+	}
+}
+
+function recommencer() {
+	location.reload();
+}
+
+function dessiner() {
+	const canvas = document.getElementById("game");
+	const ctx = canvas.getContext("2d");
+
+	// on dessine la carte case par case
+	for (let y = 0; y < carte.length; y++) {
+		for (let x = 0; x < carte[y].length; x++) {
+			let px = x * tailleCase;
+			let py = y * tailleCase;
+
+			if (carte[y][x] === "X") {
+				ctx.fillStyle = "#1a2cff";
+				ctx.fillRect(px, py, tailleCase, tailleCase);
+			} else {
+				ctx.fillStyle = "#000000";
+				ctx.fillRect(px, py, tailleCase, tailleCase);
+
+				if (carte[y][x] === "O") {
+					ctx.fillStyle = "#f7e85c";
+					ctx.beginPath();
+					ctx.arc(px + tailleCase / 2, py + tailleCase / 2, 4, 0, Math.PI * 2);
+					ctx.fill();
+				}
+			}
+		}
+	}
+
+	// on place pacman et le fantome
+	let imagePacman = pacmanRight;
+	if (pacman.direction === "gauche") imagePacman = pacmanLeft;
+	if (pacman.direction === "haut") imagePacman = pacmanUp;
+	if (pacman.direction === "bas") imagePacman = pacmanDown;
+
+	ctx.drawImage(imagePacman, pacmanX * tailleCase, pacmanY * tailleCase, tailleCase, tailleCase);
+	ctx.drawImage(redGhost, fantomeX * tailleCase, fantomeY * tailleCase, tailleCase, tailleCase);
+}
+
+function chargerCarte() {
+	// on cherche les positions de depart dans la carte
+	for (let y = 0; y < carte.length; y++) {
+		for (let x = 0; x < carte[y].length; x++) {
+			if (carte[y][x] === "P") {
+				pacmanX = x;
+				pacmanY = y;
+			}
+			if (carte[y][x] === "F") {
+				fantomeX = x;
+				fantomeY = y;
+			}
+		}
+	}
+
+	// compter le nombre total de pastilles et initialiser le compteur mangé
+	pastilleTotal = countTotalPastilles();
+	pastilleMangee = 0;
+	updateCountersDisplay();
+
+	dessiner();
+}
+
+// charger la carte 1 (par défaut)
+function chargerCarte1() {
+	carte = [...carte1];
+	chargerCarte();
+	hideMessage();
+}
+
+// charger la carte 2 (ambree)
+function chargerCarte2() {
+	carte = [...carte2];
+	chargerCarte();
+	hideMessage();
+}
 
 function DirectionFantome(carte, fantomeX, fantomeY, pacmanX, pacmanY) {
   let start = [fantomeX, fantomeY];
@@ -111,7 +269,7 @@ function DirectionFantome(carte, fantomeX, fantomeY, pacmanX, pacmanY) {
     let [x, y] = file.shift();
 
     let positionStr = [x, y].toString();
-    if (positionStr === end.toString())) {
+    if (positionStr === end.toString()) {
       let chemin = [];
 
       while (positionStr !== start.toString()) {
@@ -148,4 +306,80 @@ function DirectionFantome(carte, fantomeX, fantomeY, pacmanX, pacmanY) {
   }
 
   return null;
+}
+
+function refresh() {
+	// on calcule la prochaine position de pacman
+	let nx = pacmanX;
+	let ny = pacmanY;
+
+	if (pacman.direction === "droite") nx = pacmanX + 1;
+	if (pacman.direction === "gauche") nx = pacmanX - 1;
+	if (pacman.direction === "haut")   ny = pacmanY - 1;
+	if (pacman.direction === "bas")    ny = pacmanY + 1;
+
+	// on bouge pacman seulement si c'est dans la carte et pas un mur
+	if (ny >= 0 && ny < carte.length && nx >= 0 && nx < carte[ny].length && carte[ny][nx] !== "X") {
+		pacmanX = nx;
+		pacmanY = ny;
+
+		// si pacman passe sur une pastille, on la mange
+		if (carte[pacmanY][pacmanX] === "O") {
+			pastilleMangee++;
+			changerCaseCarte(pacmanX, pacmanY, " ");
+			updateCountersDisplay();
+
+			// si toutes les pastilles sont mangées, terminer le jeu
+			if (pastilleTotal > 0 && pastilleMangee >= pastilleTotal) {
+				endGame(true);
+			}
+		}
+	}
+
+	// on bouge le fantome avec le BFS
+	let chemin = DirectionFantome(carte, fantomeX, fantomeY, pacmanX, pacmanY);
+	if (chemin !== null && chemin.length > 0) {
+		fantomeX = chemin[0][1];
+		fantomeY = chemin[0][0];
+	}
+
+	dessiner();
+}
+
+// gestion des touches du clavier pour diriger pacman
+document.addEventListener("keydown", function(e) {
+	if (e.key === "ArrowRight") {
+		pacman.direction = "droite";
+	}
+	if (e.key === "ArrowLeft") {
+		pacman.direction = "gauche";
+	}
+	if (e.key === "ArrowUp") {
+		pacman.direction = "haut";
+	}
+	if (e.key === "ArrowDown") {
+		pacman.direction = "bas";
+	}
+});
+
+window.onload = function() {
+	chargerCarte1();
+};
+
+function endGame(win) {
+	if (window.gameInterval) {
+		clearInterval(window.gameInterval);
+		window.gameInterval = null;
+	}
+	const bs = document.getElementById('btnStart');
+	const br = document.getElementById('btnRestart');
+	if (bs) bs.style.display = 'none';
+	if (br) br.style.display = 'inline-block';
+	setMapButtonsDisabled(false);
+	stopMusic();
+	if (win) {
+		setTimeout(function() { showMessage('Bravo — tu as mangé toutes les pastilles !'); }, 50);
+	} else {
+		setTimeout(function() { showMessage('Game over'); }, 50);
+	}
 }

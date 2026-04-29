@@ -27,3 +27,52 @@ button {
 button:hover {
   background-color: #0e3bcf;
 }
+
+#btnRestart {   
+  width: auto;
+}
+ 
+/* normaliser bouton et compteur : même boîte texte */
+button, span {
+    display: inline-block;
+    font-size: 30px;
+    color: #fff;
+    height: 50px;
+    margin-top: 40px;
+    display: inline-block;
+    vertical-align: middle;
+    line-height: 42px;  /* égal à height => texte centré verticalement */
+    padding: 0 10px;    
+}
+
+  /* message au dessus de la carte */
+  /* container de la zone de jeu */
+  #gameContainer {
+    position: relative;
+    width: 595px;
+    margin: 0 auto 10px;
+  }
+
+  /* message affiché au-dessus du canvas */
+  #gameMessage {
+    display: none;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 85%;
+    text-align: center;
+    font-size: 22px;
+    color: #fff;
+    background: rgba(0,0,0,0.7);
+    padding: 8px;
+    border-radius: 6px;
+    box-sizing: border-box;
+    z-index: 10;
+  }
+
+  /* style pour les boutons désactivés */
+  button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
