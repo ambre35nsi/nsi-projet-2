@@ -397,7 +397,7 @@ function move() {
 		}
 	}
 
-	// on bouge les fantomes 1 fois sur 2 pour ralentir
+	// on bouge les fantomes 1 fois sur 2 pour ralentir sinon is vont trop vite
 	tickFantome++;
 	if (tickFantome % 2 === 0) {
 		let prochainePosition = deplacerFantome(fantomeX, fantomeY);
@@ -406,8 +406,10 @@ function move() {
 
 		if (fantome2Actif) {
 			let prochainePositionFantome2 = deplacerFantome(fantome2X, fantome2Y);
-			fantome2X = prochainePositionFantome2.x;
-			fantome2Y = prochainePositionFantome2.y;
+			if (prochainePositionFantome2.x !== fantomeX || prochainePositionFantome2.y !== fantomeY) {
+				fantome2X = prochainePositionFantome2.x;
+				fantome2Y = prochainePositionFantome2.y;
+			}
 		}
 	}
 
