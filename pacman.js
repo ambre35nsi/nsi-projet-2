@@ -1,4 +1,36 @@
-const tailleCase = 35;
+let tailleCase = 35;
+const nbCases = 17;
+const tailleCaseMin = 16;
+
+function ajusterTailleJeu() {
+	const canvas = document.getElementById("game");
+	const container = document.getElementById("gameContainer");
+	if (!canvas) return;
+
+	// on garde de la place pour les boutons et le score
+	let largeurDispo = window.innerWidth - 40;
+	let hauteurDispo = window.innerHeight - 220;
+
+	if (largeurDispo < 200) largeurDispo = 200;
+	if (hauteurDispo < 200) hauteurDispo = 200;
+
+	let cote = Math.min(largeurDispo, hauteurDispo);
+	tailleCase = Math.floor(cote / nbCases);
+
+	if (tailleCase < tailleCaseMin) {
+		tailleCase = tailleCaseMin;
+	}
+
+	let tailleCanvas = tailleCase * nbCases;
+	canvas.width = tailleCanvas;
+	canvas.height = tailleCanvas;
+	canvas.style.width = tailleCanvas + "px";
+	canvas.style.height = tailleCanvas + "px";
+
+	if (container) {
+		container.style.width = tailleCanvas + "px";
+	}
+}
 
 let pacmanRight = new Image();
 pacmanRight.src = "pacmanRight.png";
@@ -225,7 +257,7 @@ function draw() {
 				if (carte[y][x] === "O") {
 					ctx.fillStyle = "#f7e85c";
 					ctx.beginPath();
-					ctx.arc(px + tailleCase / 2, py + tailleCase / 2, 4, 0, Math.PI * 2);
+					ctx.arc(px + tailleCase / 2, py + tailleCase / 2, Math.max(2, Math.floor(tailleCase / 8)), 0, Math.PI * 2);
 					ctx.fill();
 				}
 			}
@@ -446,8 +478,16 @@ document.addEventListener("keydown", function(e) {
 });
 
 window.onload = function() {
+	ajusterTailleJeu();
 	changerCarte(1);
 };
+
+window.addEventListener("resize", function() {
+	ajusterTailleJeu();
+	if (typeof carte !== "undefined") {
+		draw();
+	}
+});
 
 function endGame(win) {
 	if (window.gameInterval) {
