@@ -193,8 +193,8 @@ function deplacerFantome(xFantome, yFantome) {
 	let chemin = DirectionFantome(carte, xFantome, yFantome, pacmanX, pacmanY);
 	if (chemin !== null && chemin.length > 0) {
 		return {
-			x: chemin[0][1],
-			y: chemin[0][0]
+			x: chemin[0][0],
+			y: chemin[0][1]
 		};
 	}
 
@@ -350,10 +350,10 @@ function DirectionFantome(carte, fantomeX, fantomeY, pacmanX, pacmanY) {
       //on verifie les limites, les murs et les cases deja visitees
       if (
         nx >= 0 &&
-        nx < carte.length &&
+				nx < carte[0].length &&
         ny >= 0 &&
-        ny < carte[nx].length &&
-        carte[nx][ny] !== "X" &&
+				ny < carte.length &&
+				carte[ny][nx] !== "X" &&
         !visited.has(cleVoisin)
       ) {
         file.push([nx, ny]);
