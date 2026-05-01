@@ -106,7 +106,7 @@ function start() {
 		boutonRestart.style.display = "inline-block";
 	}
 	hideMessage();
-	changerBoutonOnOff(true);
+	changerBoutonDisable(true);
 	playMusic();
 	if (window.gameInterval) clearInterval(window.gameInterval);
 	  window.gameInterval = setInterval(update, 180);
@@ -126,19 +126,6 @@ function hideMessage() {
 		el.style.display = 'none';
 		el.textContent = '';
 	}
-}
-
-function changerBoutonOnOff(disabled) {
-	const n1 = document.getElementById('btnNiveau1');
-	const n2 = document.getElementById('btnNiveau2');
-	const b1 = document.getElementById('btnCarte1');
-	const b2 = document.getElementById('btnCarte2');
-	const b3 = document.getElementById('btnCarte3');
-	if (n1) n1.disabled = disabled;
-	if (n2) n2.disabled = disabled;
-	if (b1) b1.disabled = disabled;
-	if (b2) b2.disabled = disabled;
-	if (b3) b3.disabled = disabled;
 }
 
 function playMusic() {
@@ -166,7 +153,17 @@ function stopMusic() {
 }
 
 function recommencer() {
-	location.reload();
+	// on arrete le jeu et on revient a l'ecran de depart
+	if (window.gameInterval) {
+		clearInterval(window.gameInterval);
+		window.gameInterval = null;
+	}
+	stopMusic();
+	chargerCarte(maCarte);
+
+	afficherBoutonNonDemarre();
+	changerBoutonDisable(false);
+	hideMessage();
 }
 
 function mettreAJourBoutonsSelection() {
@@ -451,11 +448,34 @@ function endGame(win) {
 	const br = document.getElementById('btnRestart');
 	if (bs) bs.style.display = 'none';
 	if (br) br.style.display = 'inline-block';
-	changerBoutonOnOff(false);
+	changerBoutonDisable(false);
 	stopMusic();
 	if (win) {
 		setTimeout(function() { showMessage('Win !'); }, 50);
 	} else {
 		setTimeout(function() { showMessage('Game over'); }, 50);
 	}
+	afficherBoutonNonDemarre();
+}
+
+function afficherBoutonNonDemarre() {
+
+	let boutonStart = document.getElementById("btnStart");
+	let boutonRestart = document.getElementById("btnRestart");	
+	
+	if (boutonStart) boutonStart.style.display = "inline-block";
+	if (boutonRestart) boutonRestart.style.display = "none";
+}
+
+function changerBoutonDisable(disabled) {
+	const n1 = document.getElementById('btnNiveau1');
+	const n2 = document.getElementById('btnNiveau2');
+	const c1 = document.getElementById('btnCarte1');
+	const c2 = document.getElementById('btnCarte2');
+	
+	if (n1) n1.disabled = disabled;
+	if (n2) n2.disabled = disabled;
+	if (c1) c1.disabled = disabled;
+	if (c2) c2.disabled = disabled;
+
 }
