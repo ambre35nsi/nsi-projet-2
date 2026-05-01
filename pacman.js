@@ -27,6 +27,7 @@ let pastilleTotal = 0;
 let score = 0;
 
 let maMusique = null;
+let tickFantome = 0;
 
 
 // carte codée en dur 17x17
@@ -95,6 +96,9 @@ function countTotalPastilles() {
 }
 
 function start() {
+	
+	// remet la partie a zero (positions, score, pastilles) sans reload page
+	chargerCarte(maCarte);
 
 	let boutonStart = document.getElementById("btnStart");
 	let boutonRestart = document.getElementById("btnRestart");
@@ -290,6 +294,7 @@ function chargerCarte(num) {
 	pastilleMangee = 0;
 	score = 0;
 	updateCountersDisplay();
+	pacman.direction = "";
 
 	draw();
 
@@ -392,15 +397,18 @@ function move() {
 		}
 	}
 
-	// on bouge le fantome avec le BFS
-	let prochainePosition = deplacerFantome(fantomeX, fantomeY);
-	fantomeX = prochainePosition.x;
-	fantomeY = prochainePosition.y;
+	// on bouge les fantomes 1 fois sur 2 pour ralentir
+	tickFantome++;
+	if (tickFantome % 2 === 0) {
+		let prochainePosition = deplacerFantome(fantomeX, fantomeY);
+		fantomeX = prochainePosition.x;
+		fantomeY = prochainePosition.y;
 
-	if (fantome2Actif) {
-		let prochainePositionFantome2 = deplacerFantome(fantome2X, fantome2Y);
-		fantome2X = prochainePositionFantome2.x;
-		fantome2Y = prochainePositionFantome2.y;
+		if (fantome2Actif) {
+			let prochainePositionFantome2 = deplacerFantome(fantome2X, fantome2Y);
+			fantome2X = prochainePositionFantome2.x;
+			fantome2Y = prochainePositionFantome2.y;
+		}
 	}
 
 	if ((pacmanX === fantomeX && pacmanY === fantomeY) || (fantome2Actif && pacmanX === fantome2X && pacmanY === fantome2Y)) {
