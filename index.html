@@ -13,29 +13,27 @@
             <div id="gameMessage" style="display:none; position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); width:85%; text-align:center; font-size:22px; color:#fff; background:rgba(0,0,0,0.7); padding:8px; border-radius:6px; box-sizing:border-box; z-index:10;">
             </div>
         </div>
-        <table>
-            <tr>
-                <td style="padding-right: 30px;">
-                    <span>Niveau</span>
-                    <button id="btnNiveau1" type="button" onclick="changerNiveau(1);" style="width:40px">1</button>
-                    <button id="btnNiveau2" type="button" onclick="changerNiveau(2);" style="width:40px">2</button>
-                </td>                
-                <td style="padding-right: 30px;">
-                    <span>Carte</span>
-                    <button id="btnCarte1" type="button" onclick="chargerCarte(1);" style="width:40px">1</button>
-                    <button id="btnCarte2" type="button" onclick="chargerCarte(2);" style="width:40px">2</button>
-                </td>
-                <td>
-                    <button id="btnStart" type="button" onclick="start();">Commencer</button>
-                    <button id="btnRestart" type="button" onclick="recommencer();" style="display:none;">Recommencer</button>
-                </td>
-                <td style="padding-left: 30px;">
-                    <span id="spanPastilleMangee">0</span>
-                    <span id="spanPastilleSeparation">/</span>
-                    <span id="spanPastilleTotal">0</span>
-                </td>
-            </tr>
-        </table>
+        <div id="menu" style="display:flex; flex-wrap:wrap; justify-content:center; gap:12px; max-width:900px; margin:0 auto;">
+            <div style="display:flex; align-items:center; gap:6px; white-space:nowrap;">
+                <span>Niveau</span>
+                <button id="btnNiveau1" type="button" onclick="changerNiveau(1);" style="width:40px">1</button>
+                <button id="btnNiveau2" type="button" onclick="changerNiveau(2);" style="width:40px">2</button>
+            </div>
+            <div style="display:flex; align-items:center; gap:6px; white-space:nowrap;">
+                <span>Carte</span>
+                <button id="btnCarte1" type="button" onclick="chargerCarte(1);" style="width:40px">1</button>
+                <button id="btnCarte2" type="button" onclick="chargerCarte(2);" style="width:40px">2</button>
+            </div>
+            <div style="display:flex; align-items:center; gap:6px; white-space:nowrap;">
+                <button id="btnStart" type="button" onclick="start();">Commencer</button>
+                <button id="btnRestart" type="button" onclick="recommencer();" style="display:none;">Recommencer</button>
+            </div>
+            <div style="display:flex; align-items:center; gap:6px; white-space:nowrap;">
+                <span id="spanPastilleMangee">0</span>
+                <span id="spanPastilleSeparation">/</span>
+                <span id="spanPastilleTotal">0</span>
+            </div>
+        </div>
     <!---lu en dernier-->
     <script src="pacman.js"></script>
 </body>
