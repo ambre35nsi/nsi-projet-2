@@ -417,10 +417,26 @@ function move() {
 	let nx = pacmanX;
 	let ny = pacmanY;
 
-	if (pacman.direction === "droite") nx = pacmanX + 1;
-	if (pacman.direction === "gauche") nx = pacmanX - 1;
-	if (pacman.direction === "haut")   ny = pacmanY - 1;
-	if (pacman.direction === "bas")    ny = pacmanY + 1;
+    // change de direction selon direction souhaitee si possible
+    if (pacman.directionSouhaitee !== pacman.direction) {
+        if (pacman.directionSouhaitee === "droite" && pacmanX + 1 < carte[pacmanY].length && carte[pacmanY][pacmanX + 1] !== "X") {
+            pacman.direction = "droite";
+        }
+        if (pacman.directionSouhaitee === "gauche" && pacmanX - 1 > 0 && carte[pacmanY][pacmanX - 1] !== "X") {
+            pacman.direction = "gauche";
+        }
+        if (pacman.directionSouhaitee === "haut" && pacmanY - 1 > 0 && carte[pacmanY - 1][pacmanX] !== "X") {
+            pacman.direction = "haut";
+        }
+        if (pacman.directionSouhaitee === "bas" && pacmanY + 1 < carte.length && carte[pacmanY + 1][pacmanX] !== "X") {
+            pacman.direction = "bas";
+        }
+    }
+
+    if (pacman.direction === "droite") nx = pacmanX + 1;
+    if (pacman.direction === "gauche") nx = pacmanX - 1;
+    if (pacman.direction === "haut")   ny = pacmanY - 1;
+    if (pacman.direction === "bas")    ny = pacmanY + 1;
 
 	// on bouge pacman seulement si c'est dans la carte et pas un mur
 	if (ny >= 0 && ny < carte.length && nx >= 0 && nx < carte[ny].length && carte[ny][nx] !== "X") {
@@ -480,16 +496,16 @@ function update() {
 // gestion des touches du clavier pour diriger pacman
 document.addEventListener("keydown", function(e) {
 	if (e.key === "ArrowRight") {
-		pacman.direction = "droite";
+		pacman.directionSouhaitee = "droite";
 	}
 	if (e.key === "ArrowLeft") {
-		pacman.direction = "gauche";
+		pacman.directionSouhaitee = "gauche";
 	}
 	if (e.key === "ArrowUp") {
-		pacman.direction = "haut";
+		pacman.directionSouhaitee = "haut";
 	}
 	if (e.key === "ArrowDown") {
-		pacman.direction = "bas";
+		pacman.directionSouhaitee = "bas";
 	}
 });
 
