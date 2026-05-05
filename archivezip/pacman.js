@@ -337,6 +337,7 @@ function chargerCarte(num) {
 	score = 0;
 	updateCountersDisplay();
 	pacman.direction = "";
+	pacman.directionSouhaitee = "";
 
 	draw();
 
