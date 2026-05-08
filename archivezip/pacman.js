@@ -46,6 +46,9 @@ pacmanDown.src = "pacmanDown.png";
 // image du fantome rouge
 let redGhost = new Image();
 redGhost.src = "redGhost.png";
+// image du fantome orange
+let orangeGhost = new Image();
+orangeGhost.src = "orangeGhost.png";
 
 // image de pacman en mouvement 
 let pacman = new Image();
@@ -112,13 +115,42 @@ const carte2 = [
 	"XXXXXXXXXXXXXXXXX",
 ];
 
+let carte = null;
 
 function changerCaseCarte(x, y, valeur) {
 	let ligne = carte[y];
 	carte[y] = ligne.substring(0, x) + valeur + ligne.substring(x + 1);
 }
 
+const directions = [
+  [1, 0],
+  [-1, 0],
+  [0, 1],
+  [0, -1]
+];
 
+const nomDirections = {
+  droite: 0,
+  gauche: 1,
+  bas: 2,
+  haut: 3
+};
+
+function getDirection(x, y, newX, newY) {
+	if (newX > x)
+		return nomDirections.droite;
+	if (newX < x)
+		return nomDirections.gauche;
+	if (newY > y)
+		return nomDirections.bas;
+	if (newY < y)
+		return nomDirections.haut;
+}
+
+const TypeDeplacementFantome = {
+  PLUS_COURT_CHEMIN: 'PlusCourtChemin',
+  AU_HASARD: 'AuHasard'
+};
 
 function updateCountersDisplay() {
 	const textPastilleMangee = document.getElementById('spanPastilleMangee');
@@ -135,27 +167,6 @@ function countTotalPastilles() {
 		}
 	}
 	return c;
-}
-
-function start() {
-	
-	// remet la partie a zero (positions, score, pastilles) sans reload page
-	chargerCarte(maCarte);
-
-	let boutonStart = document.getElementById("btnStart");
-	let boutonRestart = document.getElementById("btnRestart");
-
-	if (boutonStart) {
-		boutonStart.style.display = "none";
-	}
-	if (boutonRestart) {
-		boutonRestart.style.display = "inline-block";
-	}
-	hideMessage();
-	changerBoutonDisable(true);
-	playMusic();
-	if (window.gameInterval) clearInterval(window.gameInterval);
-	  window.gameInterval = setInterval(update, 180);
 }
 
 function showMessage(msg) {
@@ -175,10 +186,8 @@ function hideMessage() {
 }
 
 function playMusic() {
-
 	try {
-
-	if (!maMusique) {
+		if (!maMusique) {
 			maMusique = new Audio('pacman.mp3');
 			maMusique.loop = true;
 		}
@@ -196,6 +205,26 @@ function stopMusic() {
 			maMusique.pause();
 			maMusique.currentTime = 0;
 		}
+}
+
+function start() {
+	// remet la partie a zero (positions, score, pastilles) sans reload page
+	chargerCarte(maCarte);
+
+	let boutonStart = document.getElementById("btnStart");
+	let boutonRestart = document.getElementById("btnRestart");
+
+	if (boutonStart) {
+		boutonStart.style.display = "none";
+	}
+	if (boutonRestart) {
+		boutonRestart.style.display = "inline-block";
+	}
+	hideMessage();
+	changerBoutonDisable(true);
+	playMusic();
+	if (window.gameInterval) clearInterval(window.gameInterval);
+	window.gameInterval = setInterval(update, 180);
 }
 
 function recommencer() {
@@ -230,61 +259,6 @@ function changerNiveau(niveau) {
 	chargerCarte(maCarte);
 	mettreAJourBoutonsSelection();
 	hideMessage();
-}
-
-function deplacerFantome(xFantome, yFantome) {
-	let chemin = DirectionFantome(carte, xFantome, yFantome, pacmanX, pacmanY);
-	if (chemin !== null && chemin.length > 0) {
-		return {
-			x: chemin[0][0],
-			y: chemin[0][1]
-		};
-	}
-
-	return {
-		x: xFantome,
-		y: yFantome
-	};
-}
-
-function draw() {
-	const canvas = document.getElementById("game");
-	const ctx = canvas.getContext("2d");
-
-	// on dessine la carte case par case
-	for (let y = 0; y < carte.length; y++) {
-		for (let x = 0; x < carte[y].length; x++) {
-			let px = x * tailleCase;
-			let py = y * tailleCase;
-
-			if (carte[y][x] === "X") {
-				ctx.fillStyle = "#1a2cff";
-				ctx.fillRect(px, py, tailleCase, tailleCase);
-			} else {
-				ctx.fillStyle = "#000000";
-				ctx.fillRect(px, py, tailleCase, tailleCase);
-
-				if (carte[y][x] === "O") {
-					ctx.fillStyle = "#f7e85c";
-					ctx.beginPath();
-					ctx.arc(px + tailleCase / 2, py + tailleCase / 2, Math.max(2, Math.floor(tailleCase / 8)), 0, Math.PI * 2);
-					ctx.fill();
-				}
-			}
-		}
-	}
-
-	// on place pacman et le fantome
-	let imagePacman = pacmanRight;
-	if (pacman.direction === "gauche") imagePacman = pacmanLeft;
-	if (pacman.direction === "haut") imagePacman = pacmanUp;
-	if (pacman.direction === "bas") imagePacman = pacmanDown;
-
-	ctx.drawImage(imagePacman, pacmanX * tailleCase, pacmanY * tailleCase, tailleCase, tailleCase);
-	ctx.drawImage(redGhost, fantomeX * tailleCase, fantomeY * tailleCase, tailleCase, tailleCase);
-	if (fantome2Actif) {
-		ctx.drawImage(redGhost, fantome2X * tailleCase, fantome2Y * tailleCase, tailleCase, tailleCase);
-	}
 }
 
 function chargerCarte(num) {
@@ -323,10 +297,12 @@ function chargerCarte(num) {
 		let dernierFantome = positionsFantomes[positionsFantomes.length - 1];
 		fantomeX = dernierFantome.x;
 		fantomeY = dernierFantome.y;
+		fantomeDirection = nomDirections.droite;
 
 		if (monNiveau === 2 && positionsFantomes.length > 1) {
 			fantome2X = positionsFantomes[0].x;
 			fantome2Y = positionsFantomes[0].y;
+			fantome2Direction = nomDirections.droite;
 			fantome2Actif = true;
 		}
 	}
@@ -347,13 +323,8 @@ function chargerCarte(num) {
 	}
 }
 
-// changer la carte
-function changerCarte(num) {
-	chargerCarte(num);
-}
-
 // gérer le déplacement des fantômes avec un algorithme IA BFS
-function DirectionFantome(carte, fantomeX, fantomeY, pacmanX, pacmanY) {
+function DirectionFantomePlusCourtChemin(carte, fantomeX, fantomeY, pacmanX, pacmanY) {
   let start = [fantomeX, fantomeY];
   let end = [pacmanX, pacmanY];
   let file = [start];
@@ -362,27 +333,21 @@ function DirectionFantome(carte, fantomeX, fantomeY, pacmanX, pacmanY) {
   visited.add(start.toString());
 
   let parent = {};
-  const directions = [
-    [1, 0],
-    [-1, 0],
-    [0, 1],
-    [0, -1],
-  ];
 
   while (file.length > 0) {
-    let [x, y] = file.shift();
+    let [x, y] = file.shift(); // 1ere valeur de la file retournée et retirée
 
     let positionStr = [x, y].toString();
     if (positionStr === end.toString()) {
       let chemin = [];
 
       while (positionStr !== start.toString()) {
-        let [cx, cy] = positionStr.split(",").map(Number);
+        let [cx, cy] = positionStr.split(",").map(Number); // inverse de <chaine>.toString()
         chemin.push([cx, cy]);
         positionStr = parent[positionStr];
       }
 
-      chemin.reverse();
+      chemin.reverse(); // inversion du chemin pour partir de start
       return chemin;
     }
 
@@ -391,25 +356,95 @@ function DirectionFantome(carte, fantomeX, fantomeY, pacmanX, pacmanY) {
       let dy = directions[i][1];
       let nx = x + dx;
       let ny = y + dy;
-      let cleVoisin = [nx, ny].toString();
+      let voisinStr = [nx, ny].toString();
 
       //on verifie les limites, les murs et les cases deja visitees
-      if (
-        nx >= 0 &&
-				nx < carte[0].length &&
-        ny >= 0 &&
-				ny < carte.length &&
-				carte[ny][nx] !== "X" &&
-        !visited.has(cleVoisin)
+      if (nx >= 0 &&
+		  nx < carte[0].length &&
+		  ny >= 0 &&
+		  ny < carte.length &&
+		  carte[ny][nx] !== "X" &&
+		  !visited.has(voisinStr)
       ) {
         file.push([nx, ny]);
-        visited.add(cleVoisin);
-        parent[cleVoisin] = [x, y].toString();
+        visited.add(voisinStr);
+        parent[voisinStr] = [x, y].toString();
       }
     }
   }
 
   return null;
+}
+
+function DirectionFantomeAuHasard(carte, fantomeX, fantomeY, fantomeDirection) {
+  let start = [fantomeX, fantomeY];
+  let chemin = [start];
+
+  //on decide au hasard (par ex 4 chances sur 5 soit <0.80) si le fantome continue dans sa direction
+  if (Math.random() < 0.80) {
+    //on verifie si le fantome peut continuer dans cette direction
+    let direction = directions[fantomeDirection];
+
+	//on teste cette direction
+	let nx = start[0]+direction[0];
+	let ny = start[1]+direction[1];
+	//on verifie les limites, les murs et les cases deja visitees
+	if (nx >= 0 &&
+		nx < carte[0].length &&
+		ny >= 0 &&
+		ny < carte.length &&
+		carte[ny][nx] !== "X"
+	) {
+	  let chemin = [[nx, ny]];
+	  return chemin;
+	}
+  }
+
+  //nouvelle direction au hasard
+  nomDirectionsATester = [nomDirections.droite, nomDirections.gauche, nomDirections.bas, nomDirections.haut];
+  for (let i = nomDirectionsATester.length; i > 0; i--) {
+	//une direction au hasard parmi celles restantes
+	let nomDirection = Math.floor(Math.random() * i);
+    let direction = directions[nomDirection];
+	//on retire cette direction des choix
+	nomDirectionsATester.splice(nomDirection, 1);
+
+	//on teste cette direction
+	let nx = start[0]+direction[0];
+	let ny = start[1]+direction[1];
+	//on verifie les limites, les murs et les cases deja visitees
+	if (nx >= 0 &&
+		nx < carte[0].length &&
+		ny >= 0 &&
+		ny < carte.length &&
+		carte[ny][nx] !== "X"
+	) {
+	  let chemin = [[nx, ny]];
+	  return chemin;
+	}
+  }
+  //pas de chemin trouvé => impossible
+}
+
+function deplacerFantome(xFantome, yFantome, fantomeDirection, typeDeplacement) {
+	let chemin = null;
+	if (typeDeplacement === TypeDeplacementFantome.PLUS_COURT_CHEMIN) {
+		chemin = DirectionFantomePlusCourtChemin(carte, xFantome, yFantome, pacmanX, pacmanY);
+	}
+	else if (typeDeplacement === TypeDeplacementFantome.AU_HASARD) {
+		chemin = DirectionFantomeAuHasard(carte, xFantome, yFantome, fantomeDirection);
+	}
+	if (chemin !== null && chemin.length > 0) {
+		return {
+			x: chemin[0][0],
+			y: chemin[0][1]
+		};
+	}
+
+	return {
+		x: xFantome,
+		y: yFantome
+	};
 }
 
 // On calcule tous les déplacement du jeu
@@ -462,12 +497,14 @@ function move() {
 	// on bouge les fantomes 1 fois sur 2 pour ralentir sinon is vont trop vite
 	tickFantome++;
 	if (tickFantome % 2 === 0) {
-		let prochainePosition = deplacerFantome(fantomeX, fantomeY);
+		let prochainePosition = deplacerFantome(fantomeX, fantomeY, fantomeDirection, TypeDeplacementFantome.PLUS_COURT_CHEMIN);
+		fantomeDirection = getDirection(fantomeX, fantomeY, prochainePosition.x, prochainePosition.y);
 		fantomeX = prochainePosition.x;
 		fantomeY = prochainePosition.y;
 
 		if (fantome2Actif) {
-			let prochainePositionFantome2 = deplacerFantome(fantome2X, fantome2Y);
+			let prochainePositionFantome2 = deplacerFantome(fantome2X, fantome2Y, fantome2Direction, TypeDeplacementFantome.AU_HASARD);
+			fantome2Direction = getDirection(fantome2X, fantome2Y, prochainePositionFantome2.x, prochainePositionFantome2.y);
 			if (prochainePositionFantome2.x !== fantomeX || prochainePositionFantome2.y !== fantomeY) {
 				fantome2X = prochainePositionFantome2.x;
 				fantome2Y = prochainePositionFantome2.y;
@@ -480,12 +517,46 @@ function move() {
 		endGame(false);
 		return;
 	}
+}
 
-	// jamais utilisé parceque déjà vérifié
-	// if (pastilleTotal > 0 && pastilleMangee >= pastilleTotal) {
-	// 	endGame(true);
-	// 	return;
-	// }
+function draw() {
+	const canvas = document.getElementById("game");
+	const ctx = canvas.getContext("2d");
+
+	// on dessine la carte case par case
+	for (let y = 0; y < carte.length; y++) {
+		for (let x = 0; x < carte[y].length; x++) {
+			let px = x * tailleCase;
+			let py = y * tailleCase;
+
+			if (carte[y][x] === "X") {
+				ctx.fillStyle = "#1a2cff";
+				ctx.fillRect(px, py, tailleCase, tailleCase);
+			} else {
+				ctx.fillStyle = "#000000";
+				ctx.fillRect(px, py, tailleCase, tailleCase);
+
+				if (carte[y][x] === "O") {
+					ctx.fillStyle = "#f7e85c";
+					ctx.beginPath();
+					ctx.arc(px + tailleCase / 2, py + tailleCase / 2, Math.max(2, Math.floor(tailleCase / 8)), 0, Math.PI * 2);
+					ctx.fill();
+				}
+			}
+		}
+	}
+
+	// on place pacman et le fantome
+	let imagePacman = pacmanRight;
+	if (pacman.direction === "gauche") imagePacman = pacmanLeft;
+	if (pacman.direction === "haut") imagePacman = pacmanUp;
+	if (pacman.direction === "bas") imagePacman = pacmanDown;
+
+	ctx.drawImage(imagePacman, pacmanX * tailleCase, pacmanY * tailleCase, tailleCase, tailleCase);
+	ctx.drawImage(redGhost, fantomeX * tailleCase, fantomeY * tailleCase, tailleCase, tailleCase);
+	if (fantome2Actif) {
+		ctx.drawImage(orangeGhost, fantome2X * tailleCase, fantome2Y * tailleCase, tailleCase, tailleCase);
+	}
 }
 
 // gère l'affichage du jeu
@@ -513,7 +584,7 @@ document.addEventListener("keydown", function(e) {
 // chargement du jeu
 window.onload = function() {
 	ajusterTailleJeu();
-	changerCarte(1);
+	chargerCarte(1);
 };
 
 // on redessine le jeu si la taille de la fenêtre change
