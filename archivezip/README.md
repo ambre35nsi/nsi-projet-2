@@ -6,9 +6,8 @@ Les options :
 - bouton pour changer de carte
 - bouton pour changer de niveau
 
-Les régles :
-- Pacman doit manger toutes les pastilles sans être attraper par un fantôme.
-- Le joueur marque 10 points pour chaque pastille mangée
-- Si pacman mange toutes les pastilles, le joueur a gagné
-- Si pacman est attrapé par un fantôme avant d'avoir mangé toutes les pastilles, le joueur a perdu
-
+Les règles :
+- Pac‑Man doit manger toutes les pastilles sans être touché par un fantôme.
+- Le joueur marque 10 points pour chaque pastille mangée.
+- Si Pac‑Man mange toutes les pastilles, le joueur a gagné.
+- Si Pac‑Man est touché par un fantôme avant d’avoir mangé toutes les pastilles, le joueur a perdu.
