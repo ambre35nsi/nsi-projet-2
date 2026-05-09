@@ -1,6 +1,7 @@
 Pour lancer le jeu :
 - ouvrir le fichier index.html
 - cliquer sur le bouton Commencer
+- déplacer Pac-Man dans le labyrinthe à l’aide des flèches du clavier (haut, bas, gauche, droite)
 
 Les options :
 - bouton pour changer de carte
